@@ -151,7 +151,7 @@ def get_context_info():
         context_list = soup.find("contextlist")
         if context_list:
             items = context_list.find_all("Item")
-            print("\nDaftar Konteks:")
+            print("\nData IP ISP:")
             for item in items:
                 index = item.get("index", "N/A")
                 wan_type = item.find("wan_type").text if item.find("wan_type") else "N/A"
@@ -236,8 +236,8 @@ def main_menu():
     while True:
         print("\nMenu:")
         print("1. Informasi Seluler")
-        print("2. Informasi Band")
-        print("3. Informasi Konteks")
+        print("2. Informasi Band (belum bisa)")
+        print("3. Informasi IP Adress")
         print("4. Ubah Profil/APN")
         print("5. Keluar")
 
