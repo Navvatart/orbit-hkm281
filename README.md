@@ -7,6 +7,7 @@ isntallasinya
 - setelah itu bisa didownload dan letakan di usr/bin
 - ubah username dan password sesuai modem masing masing
 - kemudian kombinasikan dengan conmonitor
+- tambahkan diini " python3 /usr/bin/orbithkm281s.py" di lite_watchdog.sh (tanpa tanda petik)
 
 selesai
 
