@@ -9,5 +9,7 @@ isntallasinya
 - kemudian kombinasikan dengan conmonitor
 - tambahkan diini " python3 /usr/bin/orbithkm281.py" di lite_watchdog.sh (tanpa tanda petik)
 
+keterangan: dibagian apn dimodem harap hanya dua apn yang tersedia
+
 selesai
 
