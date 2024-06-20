@@ -3,6 +3,9 @@ import os
 import xml.etree.ElementTree as ET
 import time
 
+#developmet by Navvatart
+#version 0.1
+
 # Define modem IP address
 modem_ip = "192.168.8.1"
 

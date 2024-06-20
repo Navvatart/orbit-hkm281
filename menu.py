@@ -3,6 +3,10 @@ from bs4 import BeautifulSoup
 import os
 import subprocess
 
+
+#developmet by Navvatart
+#version 0.1
+
 # Tentukan alamat IP modem
 modem_ip = "192.168.8.1"
 
