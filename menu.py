@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import subprocess
+import xml.etree.ElementTree as ET
 
 
 #developmet by Navvatart
@@ -207,37 +208,43 @@ def switch_profile(profile_name, wan_type="wan1"):
     else:
         print(f"Gagal mengubah profil ke {profile_name}.")
 
-
-def ambil_profil():
-# Permintaan XML untuk mendapatkan info profil
-    xml_payload_profile_info = """<?xml version="1.0" encoding="US-ASCII"?>
+def read_sms():
+    xml_payload = """<?xml version="1.0" encoding="US-ASCII"?>
 <RGW>
     <param>
         <method>call</method>
         <session>000</session>
-        <obj_path>cm</obj_path>
-        <obj_method>get_profile_info</obj_method>
+        <obj_path>sms</obj_path>
+        <obj_method>sms.list_by_type</obj_method>
     </param>
+    <sms_info>
+        <sms>
+            <page_index>1</page_index>
+            <list_type>0</list_type>
+        </sms>
+    </sms_info>
 </RGW>"""
-    profile_info_list, active_profile = post_xml_action(xml_payload_profile_info)  # Kirim permintaan XML untuk info profil
+    soup = post_xml_action(xml_payload)
+    if soup:
+        sms_list = soup.find_all("sms")
+        if sms_list:
+            print("\nDaftar SMS:")
+            for sms in sms_list:
+                sender = sms.find("sender").text if sms.find("sender") else "N/A"
+                timestamp = sms.find("timestamp").text if sms.find("timestamp") else "N/A"
+                content = sms.find("content").text if sms.find("content") else "N/A"
 
-    if profile_info_list:
-        # Pilih profil pertama yang tidak aktif
-        profile_name_to_switch = None
-        for profile in profile_info_list:
-            if profile.get('pdp_name') != active_profile:
-                profile_name_to_switch = profile.get('pdp_name')
-                break
-
-        if profile_name_to_switch:
-            print(f"Mengganti profil ke: {profile_name_to_switch}")
-            switch_profile(profile_name_to_switch)
+                print(f"Pengirim: {sender}")
+                print(f"Waktu: {timestamp}")
+                print(f"Isi: {content}")
+                print("-" * 20)
         else:
-            print("Tidak ada profil yang dapat diganti selain profil yang sedang aktif.")
+            print("Tidak ada SMS yang ditemukan.")
+    else:
+        print("Gagal mendapatkan daftar SMS.")
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
-
 
 def main_menu():
     while True:
@@ -246,10 +253,12 @@ def main_menu():
         print("1. Informasi Seluler")
         print("2. Informasi Band")
         print("3. Informasi IP")
-        print("4. Ubah Profil/APN")
-        print("5. Keluar")
+        print("4. Informasi Profil/APN")
+        print("5. Ubah Profil/APN")
+        print("6. Baca SMS")
+        print("7. Keluar")
 
-        choice = input("Pilih opsi (1-5): ")
+        choice = input("Pilih opsi (1-6): ")
 
         if choice == "1":
             clear_screen()
@@ -264,16 +273,22 @@ def main_menu():
             get_context_info()
             input("Tekan Enter untuk kembali ke menu utama...")
         elif choice == "4":
-           clear_screen()
-           
-           subprocess.run(["python3", "/usr/bin/orbithkm281s.py"])
-           input("Tekan Enter untuk kembali ke menu utama...")
+            clear_screen()
+            subprocess.run(["python3", "/usr/bin/orbithkm281apn.py"])
+            input("Tekan Enter untuk kembali ke menu utama...")
         elif choice == "5":
+            clear_screen()
+            subprocess.run(["python3", "/usr/bin/orbithkm281s.py"])
+            input("Tekan Enter untuk kembali ke menu utama...")
+        elif choice == "6":
+            clear_screen()
+            read_sms()
+            input("Tekan Enter untuk kembali ke menu utama...")
+        elif choice == "7":
             print("Keluar dari program.")
             break
         else:
             print("Opsi tidak valid. Silakan pilih lagi.")
-
 # Logika utama skrip
 if login():
     main_menu()
