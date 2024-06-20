@@ -27,7 +27,7 @@ def get_request():
         if response.status_code == 200:
             print("Permintaan GET berhasil dikirim.")
             print("Response Headers:")
-            print(response.headers)
+            #print(response.headers)
             
             # Ambil header respons untuk digunakan dalam permintaan POST
             response_headers = {

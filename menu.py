@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import os
+import subprocess
 
 # Tentukan alamat IP modem
 modem_ip = "192.168.8.1"
@@ -151,7 +152,7 @@ def get_context_info():
         context_list = soup.find("contextlist")
         if context_list:
             items = context_list.find_all("Item")
-            print("\nData IP ISP:")
+            print("\nDaftar Konteks:")
             for item in items:
                 index = item.get("index", "N/A")
                 wan_type = item.find("wan_type").text if item.find("wan_type") else "N/A"
@@ -230,29 +231,39 @@ def ambil_profil():
         else:
             print("Tidak ada profil yang dapat diganti selain profil yang sedang aktif.")
 
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def main_menu():
     while True:
+        clear_screen()
         print("\nMenu:")
         print("1. Informasi Seluler")
-        print("2. Informasi Band (belum bisa)")
-        print("3. Informasi IP Adress")
+        print("2. Informasi Band")
+        print("3. Informasi IP")
         print("4. Ubah Profil/APN")
         print("5. Keluar")
 
         choice = input("Pilih opsi (1-5): ")
 
         if choice == "1":
+            clear_screen()
             get_cellular_info()
+            input("Tekan Enter untuk kembali ke menu utama...")
         elif choice == "2":
+            clear_screen()
             get_band_info()
+            input("Tekan Enter untuk kembali ke menu utama...")
         elif choice == "3":
+            clear_screen()
             get_context_info()
+            input("Tekan Enter untuk kembali ke menu utama...")
         elif choice == "4":
-            
-           # profile_name = input("Masukkan nama profil yang ingin diaktifkan: ")
-            ambil_profil()
+           clear_screen()
+           
+           subprocess.run(["python3", "/usr/bin/orbithkm281s.py"])
+           input("Tekan Enter untuk kembali ke menu utama...")
         elif choice == "5":
             print("Keluar dari program.")
             break
