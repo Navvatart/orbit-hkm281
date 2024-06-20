@@ -3,9 +3,6 @@ import os
 import xml.etree.ElementTree as ET
 import time
 
-#developmet by Navvatart
-#version 0.1
-
 # Tentukan alamat IP modem
 modem_ip = "192.168.8.1"
 
@@ -93,7 +90,7 @@ def send_xml_request(headers):
                 for profile in profiles:
                     profile_info = {child.tag: child.text for child in profile}
                     pdp_name = profile_info.get("pdp_name")
-                    if pdp_name and pdp_name != active_profile:
+                    if pdp_name and pdp_name != active_profile and pdp_name.lower() != "default":
                         print(f"Mengganti profil Active ke: {pdp_name}")
                         switch_profile(headers, active_profile, pdp_name)
                         break
