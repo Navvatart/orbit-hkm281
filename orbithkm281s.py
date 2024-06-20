@@ -2,6 +2,7 @@ import requests
 import os
 import xml.etree.ElementTree as ET
 import time
+import random
 
 # Tentukan alamat IP modem
 modem_ip = "192.168.8.1"
@@ -87,13 +88,20 @@ def send_xml_request(headers):
                 # Cetak daftar profil
                 print("\nDaftar Profil:")
                 profiles = root.findall(".//profile_list/*")
-                for profile in profiles:
-                    profile_info = {child.tag: child.text for child in profile}
-                    pdp_name = profile_info.get("pdp_name")
-                    if pdp_name and pdp_name != active_profile and pdp_name.lower() != "default":
-                        print(f"Mengganti profil Active ke: {pdp_name}")
-                        switch_profile(headers, active_profile, pdp_name)
-                        break
+                
+                valid_profiles = [
+                    profile for profile in profiles 
+                    if profile.find("pdp_name").text != active_profile 
+                    and profile.find("pdp_name").text.lower() != "default"
+                ]
+                
+                if valid_profiles:
+                    selected_profile = random.choice(valid_profiles)
+                    pdp_name = selected_profile.find("pdp_name").text
+                    print(f"Mengganti profil Active ke: {pdp_name}")
+                    switch_profile(headers, active_profile, pdp_name)
+                else:
+                    print("Tidak ada profil yang tersedia untuk diganti.")
 
             except ET.ParseError as e:
                 print(f"Kesalahan saat parsing XML: {e}")
